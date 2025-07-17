@@ -69,12 +69,19 @@ RunService.RenderStepped:Connect(function()
 		local now = tick()
 		if now - lastTime >= 1 then
 			local fps = math.floor(frameCount / (now - lastTime))
-			fpsLabel.Text = "FPS: " .. fps
+
+			local stats = Player:FindFirstChild("NetworkClient")
+			local ping = stats and stats:GetNetworkPing() or 0
+			ping = math.floor(ping * 1000)
+
+			fpsLabel.Text = "FPS: " .. fps .. " | Ping: " .. ping .. "ms"
+
 			frameCount = 0
 			lastTime = now
 		end
 	end
 end)
+
 
 
 local SettingsConfigSection = SettingsTab:CreateSection("Config Settings")
