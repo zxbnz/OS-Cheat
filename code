@@ -1,9 +1,14 @@
-local aimbotSettings = {
-	Enabled = false,
-	FOV = 150,
-	Smoothness = 0.2,
-	HoldToAim = true -- Right-click required
+local Aimbot = {
+    Settings = {
+        Enabled = false,
+        LockPart = "HumanoidRootPart", -- Default lock target
+        Sensitivity = 0.1,
+        TeamCheck = true,
+        AliveCheck = true
+    }
 }
+
+
 local fpsLabel -- forward declaration
 -- Settings
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -2339,38 +2344,38 @@ local NoclipToggle = MainTab:CreateToggle({
 
 local SIGMAClip = MainTab:CreateSection("Aimbot")
 
+local Parts = { "Head", "UpperTorso", "HumanoidRootPart" }
+
 MainTab:CreateToggle({
-	Name = "Enable Aimbot",
-	CurrentValue = false,
-	Flag = "AimbotEnabled",
-	Callback = function(Value)
-		aimbotSettings.Enabled = Value
-	end,
+    Name = "Enable Aim Assist",
+    CurrentValue = Aimbot.Settings.Enabled,
+    Callback = function(Value)
+        Aimbot.Settings.Enabled = Value
+    end,
+})
+
+MainTab:CreateDropdown({
+    Name = "Lock Part",
+    Options = Parts,
+    CurrentOption = { Aimbot.Settings.LockPart },
+    MultipleOptions = false,
+    Callback = function(Selected)
+        Aimbot.Settings.LockPart = Selected[1]
+    end,
 })
 
 MainTab:CreateSlider({
-	Name = "Aimbot FOV Radius",
-	Range = {50, 500},
-	Increment = 10,
-	Suffix = "px",
-	CurrentValue = aimbotSettings.FOV,
-	Flag = "AimbotFOVSlider",
-	Callback = function(Value)
-		aimbotSettings.FOV = Value
-	end,
+    Name = "Aim Sensitivity",
+    Range = {0.05, 1},
+    Increment = 0.05,
+    Suffix = "",
+    CurrentValue = Aimbot.Settings.Sensitivity,
+    Callback = function(Value)
+        Aimbot.Settings.Sensitivity = Value
+    end,
 })
 
-MainTab:CreateSlider({
-	Name = "Aimbot Smoothness",
-	Range = {0.01, 1},
-	Increment = 0.01,
-	Suffix = "",
-	CurrentValue = aimbotSettings.Smoothness,
-	Flag = "AimbotSmoothnessSlider",
-	Callback = function(Value)
-		aimbotSettings.Smoothness = Value
-	end,
-})
+
 
 
 local Teleportsection = MainTab:CreateSection("Teleport")
@@ -2892,78 +2897,39 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
-local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
 
--- Your preferred team logic
-local function getEnemyTeam()
-	local ATTACKER_TEAM = "Attackers"
-	local DEFENDER_TEAM = "Defenders"
+local function getClosestTarget()
+	local closestPart = nil
+	local shortestDistance = 100 -- FOV radius in pixels
 
-	if not LocalPlayer.Team then return nil end
+	for _, player in pairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character then
+			if Aimbot.Settings.TeamCheck and player.Team == LocalPlayer.Team then continue end
 
-	if LocalPlayer.Team.Name == ATTACKER_TEAM then
-		return DEFENDER_TEAM
-	elseif LocalPlayer.Team.Name == DEFENDER_TEAM then
-		return ATTACKER_TEAM
-	end
-
-	return nil
-end
-
--- Find closest enemy head within FOV
-local function getClosestEnemyHead()
-	local closest = nil
-	local shortest = math.huge
-	local enemyTeam = getEnemyTeam()
-
-	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Team and player.Team.Name == enemyTeam then
 			local character = player.Character
-			if character and character:FindFirstChild("Head") then
-				local head = character.Head
-				local screenPos, onScreen = Camera:WorldToViewportPoint(head.Position)
+			local part = character:FindFirstChild(Aimbot.Settings.LockPart)
+			local humanoid = character:FindFirstChildOfClass("Humanoid")
 
+			if part and humanoid and (not Aimbot.Settings.AliveCheck or humanoid.Health > 0) then
+				local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
 				if onScreen then
-					local center = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-					local distance = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
+					local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+					local distance = (Vector2.new(screenPos.X, screenPos.Y) - screenCenter).Magnitude
 
-					if distance < shortest and distance <= aimbotSettings.FOV then
-						shortest = distance
-						closest = head
+					if distance < shortestDistance then
+						shortestDistance = distance
+						closestPart = part
 					end
 				end
 			end
 		end
 	end
 
-	return closest
+	return closestPart
 end
 
--- Smooth camera aim function
-local function aimSmoothlyAt(target)
-	local direction = (target.Position - Camera.CFrame.Position).Unit
-	local targetCF = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + direction)
-	Camera.CFrame = Camera.CFrame:Lerp(targetCF, aimbotSettings.Smoothness)
-end
-
-RunService.RenderStepped:Connect(function()
-	print("Aimbot status:", aimbotSettings.Enabled)
-	print("Holding RMB?", UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2))
-	print("Enemy team:", getEnemyTeam())
-
-	if not aimbotSettings.Enabled then return end
-	if aimbotSettings.HoldToAim and not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then return end
-
-	local target = getClosestEnemyHead()
-	if target then
-		print("Target acquired:", target.Name)
-		aimSmoothlyAt(target)
-	else
-		print("No valid target in FOV.")
-	end
-end)
 
