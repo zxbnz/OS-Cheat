@@ -114,7 +114,7 @@ local LoadButton = SettingsTab:CreateButton({
 })
 
 SettingsTab:CreateToggle({
-	Name = "Show FPS Counter",
+	Name = "Show FPS & Ping Counter",
 	CurrentValue = false,
 	Flag = "ShowFPSCounter",
 	Callback = function(Value)
