@@ -64,21 +64,36 @@ local lastTime = tick()
 local frameCount = 0
 
 RunService.RenderStepped:Connect(function()
-	if fpsLabel.Visible then
-		frameCount += 1
-		local now = tick()
-		if now - lastTime >= 1 then
-			local fps = math.floor(frameCount / (now - lastTime))
+	if not fpsLabel.Visible then return end
 
-			local stats = Player:FindFirstChild("NetworkClient")
-			local ping = stats and stats:GetNetworkPing() or 0
-			ping = math.floor(ping * 1000)
+	frameCount += 1
+	local now = tick()
 
-			fpsLabel.Text = "FPS: " .. fps .. " | Ping: " .. ping .. "ms"
+	if now - lastTime >= 1 then
+		local fps = math.floor(frameCount / (now - lastTime))
 
-			frameCount = 0
-			lastTime = now
+		-- ✅ Safe Ping Calculation
+		local pingValue = 0
+		local stats = game:GetService("Stats")
+		local perfStats = stats:FindFirstChild("PerformanceStats")
+		local pingStat = perfStats and perfStats:FindFirstChild("Ping")
+		if pingStat and pingStat:IsA("NumberValue") then
+			pingValue = math.floor(pingStat.Value)
 		end
+
+fpsLabel.Text = "FPS: " .. fps .. " | Ping: " .. pingValue .. "ms"
+-- 🎨 Change label color based on ping
+if pingValue <= 50 then
+	fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Green
+elseif pingValue <= 100 then
+	fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 0) -- Yellow
+else
+	fpsLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red
+end
+
+
+		frameCount = 0
+		lastTime = now
 	end
 end)
 
@@ -161,9 +176,8 @@ local ThemeDropdown = ThemesTab:CreateDropdown({
     end,
  })
 
-local Label = UpdatesTab:CreateLabel("fixed ESP fps bug", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
-local Label = UpdatesTab:CreateLabel("able to save a config in settings tab", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
-local Label = UpdatesTab:CreateLabel("Fixed themes", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
+
+local Label = UpdatesTab:CreateLabel("Added FPS & Ping Counter", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
 
 -- Add this in the UItab section, before or after the other ESP sections
 local PlayerESPSection = UItab:CreateSection("Player ESP Settings")
