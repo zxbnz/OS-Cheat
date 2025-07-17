@@ -1,11 +1,3 @@
-local Players = game:GetService("Players")
-local Camera = workspace.CurrentCamera
-local lp = Players.LocalPlayer
-local Mouse = lp:GetMouse()
-local ENEMY_FOLDER = workspace:WaitForChild("Enemies")
-
-local AimbotEnabled = false -- default is off
-local MAX_RANGE = 1000
 
 local fpsLabel -- forward declaration
 -- Settings
@@ -185,7 +177,6 @@ local ThemeDropdown = ThemesTab:CreateDropdown({
     end,
  })
 
-local Label = UpdatesTab:CreateLabel("Testing Aimbot As of Right Now.", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
 local Label = UpdatesTab:CreateLabel("Added FPS & Ping Counter", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
 
 -- Add this in the UItab section, before or after the other ESP sections
@@ -2870,90 +2861,5 @@ RunService.RenderStepped:Connect(function()
 		lastTime = now
 	end
 end)
-
--- Get the name of the opposing team
-local function getEnemyTeam()
-    local ATTACKER_TEAM = "Attackers"
-    local DEFENDER_TEAM = "Defenders"
-
-    if not lp.Team then return nil end
-
-    if lp.Team.Name == ATTACKER_TEAM then
-        return DEFENDER_TEAM
-    elseif lp.Team.Name == DEFENDER_TEAM then
-        return ATTACKER_TEAM
-    end
-end
-
--- Find the closest valid enemy on the enemy team
-local function GetClosestEnemy()
-
-    if not AimbotEnabled then return nil end
-
-    local closestEnemy = nil
-    local closestDistance = math.huge
-    local enemyTeam = getEnemyTeam()
-    if not enemyTeam then return nil end
-
-    for _, enemy in pairs(ENEMY_FOLDER:GetChildren()) do
-        if not enemy:IsA("Model") then continue end
-
-        local teamVal = enemy:FindFirstChild("Team")
-        if not teamVal or teamVal.Value.Name ~= enemyTeam then continue end
-
-        local root = enemy:FindFirstChild("HumanoidRootPart") or enemy:FindFirstChild("Head")
-        local humanoid = enemy:FindFirstChildOfClass("Humanoid")
-        if not root or not humanoid or humanoid.Health <= 0 then continue end
-
-        local screenPos, onScreen = Camera:WorldToViewportPoint(root.Position)
-        if not onScreen then continue end
-
-        local dist = (Vector2.new(screenPos.X, screenPos.Y) - Camera.ViewportSize / 2).Magnitude
-        if dist < closestDistance and (Camera.CFrame.Position - root.Position).Magnitude < MAX_RANGE then
-            closestEnemy = root
-            closestDistance = dist
-        end
-    end
-
-    return closestEnemy
-end
-
--- Shoot a ray toward the closest enemy or mouse direction
-local function FireBullet()
-    local origin = Camera.CFrame.Position
-    local direction
-
-    local target = GetClosestEnemy()
-    if target then
-        direction = (target.Position - origin).Unit
-    else
-        direction = Mouse.Hit.LookVector
-    end
-
-    local raycastParams = RaycastParams.new()
-    raycastParams.FilterDescendantsInstances = {lp.Character}
-    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-
-    local result = workspace:Raycast(origin, direction * 1000, raycastParams)
-
-    if result then
-        -- Visual tracer (optional)
-        local beam = Instance.new("Part")
-        beam.Anchored = true
-        beam.CanCollide = false
-        beam.Material = Enum.Material.Neon
-        beam.BrickColor = BrickColor.Red()
-        beam.Size = Vector3.new(0.2, 0.2, (result.Position - origin).Magnitude)
-        beam.CFrame = CFrame.new(origin, result.Position) * CFrame.new(0, 0, -beam.Size.Z / 2)
-        beam.Parent = workspace
-        game:GetService("Debris"):AddItem(beam, 0.5)
-
-        -- Damage hit target
-        local model = result.Instance:FindFirstAncestorOfClass("Model")
-        if model and model:FindFirstChild("Humanoid") then
-            model.Humanoid:TakeDamage(20)
-        end
-    end
-end
 
 
