@@ -2950,17 +2950,20 @@ local function aimSmoothlyAt(target)
 	Camera.CFrame = Camera.CFrame:Lerp(targetCF, aimbotSettings.Smoothness)
 end
 
--- Main loop
 RunService.RenderStepped:Connect(function()
+	print("Aimbot status:", aimbotSettings.Enabled)
+	print("Holding RMB?", UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2))
+	print("Enemy team:", getEnemyTeam())
+
 	if not aimbotSettings.Enabled then return end
+	if aimbotSettings.HoldToAim and not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then return end
 
-	if aimbotSettings.HoldToAim and not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-		return
-	end
-
-	local targetHead = getClosestEnemyHead()
-	if targetHead then
-		aimSmoothlyAt(targetHead)
+	local target = getClosestEnemyHead()
+	if target then
+		print("Target acquired:", target.Name)
+		aimSmoothlyAt(target)
+	else
+		print("No valid target in FOV.")
 	end
 end)
 
