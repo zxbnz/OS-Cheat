@@ -2,7 +2,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Nova V1 Operation Siege",
+    Name = "Nova V1 Operation Siege by zxbnzlol",
     LoadingTitle = "Nova V1 Cheats",
     LoadingSubtitle = "by zxbnzlol1",
     Theme = "Default",
@@ -2735,3 +2735,14 @@ Rayfield:DestroySignal():Connect(function()
     end
     playerConnections = {}
 end)
+
+SettingsTab:CreateToggle({
+	Name = "Show FPS Counter",
+	CurrentValue = false,
+	Flag = "ShowFPSCounter",
+	Callback = function(Value)
+		if _G.SetFPSCounterVisible then
+			_G.SetFPSCounterVisible(Value)
+		end
+	end,
+})
