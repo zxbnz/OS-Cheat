@@ -2866,21 +2866,26 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
--- Team logic (Attackers vs Defenders)
-local ENEMY_TEAMS = {
-	["Attackers"] = "Defenders",
-	["Defenders"] = "Attackers"
-}
-
+-- Your format: get the opposite team
 local function getEnemyTeam()
+	local ATTACKER_TEAM = "Attackers"
+	local DEFENDER_TEAM = "Defenders"
+
 	if not LocalPlayer.Team then return nil end
-	return ENEMY_TEAMS[LocalPlayer.Team.Name]
+
+	if LocalPlayer.Team.Name == ATTACKER_TEAM then
+		return DEFENDER_TEAM
+	elseif LocalPlayer.Team.Name == DEFENDER_TEAM then
+		return ATTACKER_TEAM
+	end
+
+	return nil
 end
 
--- Find the nearest enemy head within FOV
+-- Find nearest enemy's head on screen
 local function getClosestEnemyHead()
-	local closest = nil
-	local shortest = math.huge
+	local closestHead = nil
+	local shortestDistance = math.huge
 	local enemyTeam = getEnemyTeam()
 
 	for _, player in ipairs(Players:GetPlayers()) do
@@ -2889,33 +2894,35 @@ local function getClosestEnemyHead()
 			if character and character:FindFirstChild("Head") then
 				local head = character.Head
 				local screenPos, onScreen = Camera:WorldToViewportPoint(head.Position)
+
 				if onScreen then
-					local center = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-					local dist = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
-					if dist < shortest and dist < 150 then -- FOV radius
-						shortest = dist
-						closest = head
+					local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+					local distance = (Vector2.new(screenPos.X, screenPos.Y) - screenCenter).Magnitude
+
+					if distance < shortestDistance and distance < 150 then -- FOV radius
+						shortestDistance = distance
+						closestHead = head
 					end
 				end
 			end
 		end
 	end
 
-	return closest
+	return closestHead
 end
 
--- Lock camera at enemy head
-local function aimAt(target)
+-- Aim the camera at the target
+local function aimAtTarget(target)
 	local direction = (target.Position - Camera.CFrame.Position).Unit
 	Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + direction)
 end
 
--- Aimbot update loop
+-- Main update loop
 RunService.RenderStepped:Connect(function()
 	if aimbotEnabled then
-		local target = getClosestEnemyHead()
-		if target then
-			aimAt(target)
+		local targetHead = getClosestEnemyHead()
+		if targetHead then
+			aimAtTarget(targetHead)
 		end
 	end
 end)
