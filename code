@@ -1,3 +1,4 @@
+local aimbotEnabled = false
 local fpsLabel -- forward declaration
 -- Settings
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -2331,6 +2332,16 @@ local NoclipToggle = MainTab:CreateToggle({
     end,
 })
 
+MainTab:CreateToggle({
+	Name = "Enable Aimbot",
+	CurrentValue = false,
+	Flag = "AimbotToggle",
+	Callback = function(Value)
+		aimbotEnabled = Value
+	end,
+})
+
+
 local Teleportsection = MainTab:CreateSection("Teleport")
 
 -- Teleportation variables
@@ -2847,5 +2858,46 @@ RunService.RenderStepped:Connect(function()
 		fpsLabel.Text = "FPS: " .. fps
 		frameCount = 0
 		lastTime = now
+	end
+end)
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+-- Example: Aim at nearest enemy's head
+local function getClosestEnemyHead()
+	local closestHead = nil
+	local shortestDistance = math.huge
+
+	for _, player in pairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Team ~= LocalPlayer.Team then
+			local character = player.Character
+			if character and character:FindFirstChild("Head") then
+				local screenPos, onScreen = Camera:WorldToViewportPoint(character.Head.Position)
+				if onScreen then
+					local mousePos = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+					local distance = (Vector2.new(screenPos.X, screenPos.Y) - mousePos).Magnitude
+					if distance < shortestDistance and distance < 100 then -- FOV limit
+						shortestDistance = distance
+						closestHead = character.Head
+					end
+				end
+			end
+		end
+	end
+
+	return closestHead
+end
+
+-- Update loop for aimbot
+RunService.RenderStepped:Connect(function()
+	if aimbotEnabled then
+		local targetHead = getClosestEnemyHead()
+		if targetHead then
+			local direction = (targetHead.Position - Camera.CFrame.Position).Unit
+			Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + direction)
+		end
 	end
 end)
