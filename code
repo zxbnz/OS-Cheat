@@ -1,4 +1,9 @@
-local aimbotEnabled = false
+local aimbotSettings = {
+	Enabled = false,
+	FOV = 150,
+	Smoothness = 0.2,
+	HoldToAim = true -- Right-click required
+}
 local fpsLabel -- forward declaration
 -- Settings
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -2332,12 +2337,38 @@ local NoclipToggle = MainTab:CreateToggle({
     end,
 })
 
+local SIGMAClip = MainTab:CreateSection("Aimbot")
+
 MainTab:CreateToggle({
 	Name = "Enable Aimbot",
 	CurrentValue = false,
-	Flag = "AimbotToggle",
+	Flag = "AimbotEnabled",
 	Callback = function(Value)
-		aimbotEnabled = Value
+		aimbotSettings.Enabled = Value
+	end,
+})
+
+MainTab:CreateSlider({
+	Name = "Aimbot FOV Radius",
+	Range = {50, 500},
+	Increment = 10,
+	Suffix = "px",
+	CurrentValue = aimbotSettings.FOV,
+	Flag = "AimbotFOVSlider",
+	Callback = function(Value)
+		aimbotSettings.FOV = Value
+	end,
+})
+
+MainTab:CreateSlider({
+	Name = "Aimbot Smoothness",
+	Range = {0.01, 1},
+	Increment = 0.01,
+	Suffix = "",
+	CurrentValue = aimbotSettings.Smoothness,
+	Flag = "AimbotSmoothnessSlider",
+	Callback = function(Value)
+		aimbotSettings.Smoothness = Value
 	end,
 })
 
@@ -2863,10 +2894,11 @@ end)
 
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
--- Your format: get the opposite team
+-- Your preferred team logic
 local function getEnemyTeam()
 	local ATTACKER_TEAM = "Attackers"
 	local DEFENDER_TEAM = "Defenders"
@@ -2882,10 +2914,10 @@ local function getEnemyTeam()
 	return nil
 end
 
--- Find nearest enemy's head on screen
+-- Find closest enemy head within FOV
 local function getClosestEnemyHead()
-	local closestHead = nil
-	local shortestDistance = math.huge
+	local closest = nil
+	local shortest = math.huge
 	local enemyTeam = getEnemyTeam()
 
 	for _, player in ipairs(Players:GetPlayers()) do
@@ -2896,33 +2928,39 @@ local function getClosestEnemyHead()
 				local screenPos, onScreen = Camera:WorldToViewportPoint(head.Position)
 
 				if onScreen then
-					local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-					local distance = (Vector2.new(screenPos.X, screenPos.Y) - screenCenter).Magnitude
+					local center = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+					local distance = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
 
-					if distance < shortestDistance and distance < 150 then -- FOV radius
-						shortestDistance = distance
-						closestHead = head
+					if distance < shortest and distance <= aimbotSettings.FOV then
+						shortest = distance
+						closest = head
 					end
 				end
 			end
 		end
 	end
 
-	return closestHead
+	return closest
 end
 
--- Aim the camera at the target
-local function aimAtTarget(target)
+-- Smooth camera aim function
+local function aimSmoothlyAt(target)
 	local direction = (target.Position - Camera.CFrame.Position).Unit
-	Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + direction)
+	local targetCF = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + direction)
+	Camera.CFrame = Camera.CFrame:Lerp(targetCF, aimbotSettings.Smoothness)
 end
 
--- Main update loop
+-- Main loop
 RunService.RenderStepped:Connect(function()
-	if aimbotEnabled then
-		local targetHead = getClosestEnemyHead()
-		if targetHead then
-			aimAtTarget(targetHead)
-		end
+	if not aimbotSettings.Enabled then return end
+
+	if aimbotSettings.HoldToAim and not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+		return
+	end
+
+	local targetHead = getClosestEnemyHead()
+	if targetHead then
+		aimSmoothlyAt(targetHead)
 	end
 end)
+
