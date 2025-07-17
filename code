@@ -72,7 +72,7 @@ RunService.RenderStepped:Connect(function()
 	if now - lastTime >= 1 then
 		local fps = math.floor(frameCount / (now - lastTime))
 
-		-- ✅ Safe Ping Calculation
+		
 		local pingValue = 0
 		local stats = game:GetService("Stats")
 		local perfStats = stats:FindFirstChild("PerformanceStats")
@@ -82,7 +82,7 @@ RunService.RenderStepped:Connect(function()
 		end
 
 fpsLabel.Text = "FPS: " .. fps .. " | Ping: " .. pingValue .. "ms"
--- 🎨 Change label color based on ping
+
 if pingValue <= 50 then
 	fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Green
 elseif pingValue <= 100 then
