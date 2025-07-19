@@ -1,38 +1,33 @@
--- Load the Aimbot module with debug
-local success, err = pcall(function()
-    print("[AirHub] Attempting to load Aimbot module...")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
-end)
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-if not success then
-    warn("[AirHub] ❌ Failed to load Aimbot module: " .. tostring(err))
-else
-    print("[AirHub] ✅ Aimbot module loaded successfully.")
-end
+local Window = Rayfield:CreateWindow({
+    Name = "Nova OS Script by zxbnzlol",
+    LoadingTitle = "Loading Nova OS",
+    LoadingSubtitle = "by zxbnzlol",
+    Theme = "Default",
+    ConfigurationSaving = {
+       Enabled = true,
+       FolderName = nil,
+       FileName = "Big Hub"
+    },
+    Discord = {
+       Enabled = false,
+       Invite = "noinvitelink",
+       RememberJoins = true
+    },
+    KeySystem = false,
+    KeySettings = {
+       Title = "Untitled",
+       Subtitle = "Key System",
+       Note = "No method of obtaining the key is provided",
+       FileName = "Key",
+       SaveKey = true,
+       GrabKeyFromSite = false,
+       Key = {"Hello"}
+    }
+})
 
--- Wait for AirHub to load
-repeat task.wait() until getgenv().AirHub and getgenv().AirHub.Aimbot
 
--- Get reference to the Aimbot
-local A = getgenv().AirHub.Aimbot
-
--- Setup services
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
--- Aimbot Settings
-A.Settings.Enabled = false
-A.Settings.ShowFOV = true
-A.Settings.FOVRadius = 80
-A.FOVCircle = Drawing.new("Circle")
-
-print("[AirHub 🔁] Loading Rayfield UI...")
-
--- ✅
 
 
 
@@ -42,11 +37,6 @@ local ThemesTab = Window:CreateTab("Themes", 4483362458)
 local SettingsTab = Window:CreateTab("Settings", 4483362458)
 local UpdatesTab = Window:CreateTab("Updates", 4483362458)
 
-
-MainTab:CreateParagraph({
-    Title = "Welcome!",
-    Content = "Aimbot & Rayfield has successfully loaded!"
-}) -- was missing that ;-;
 
 local RunService = game:GetService("RunService")
 local Player = game.Players.LocalPlayer
@@ -677,68 +667,6 @@ if playerESPSettings.Enabled then
     setupPlayerESP()
 end
 
-
--- Aimbot Toggles
-MainTab:CreateToggle({
-	Name = "Enable Aimbot",
-	CurrentValue = false,
-	Flag = "EnableAimbot",
-	Callback = function(enabled)
-		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
-		if aimbot then
-			aimbot.Settings.Enabled = enabled
-		end
-	end,
-})
-
-
-MainTab:CreateToggle({
-	Name = "Team Check",
-	CurrentValue = false,
-	Flag = "TeamCheck",
-	Callback = function(Value)
-		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
-		if aimbot then
-			aimbot.Settings.TeamCheck = Value
-		end
-	end,
-})
-
-MainTab:CreateToggle({
-	Name = "Wall Check",
-	CurrentValue = false,
-	Flag = "WallCheck",
-	Callback = function(Value)
-		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
-		if aimbot then
-			aimbot.Settings.WallCheck = Value
-		end
-	end,
-})
-
-MainTab:CreateToggle({
-	Name = "Toggle Mode (vs Hold)",
-	CurrentValue = false,
-	Flag = "ToggleMode",
-	Callback = function(Value)
-		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
-		if aimbot then
-			aimbot.Settings.Toggle = Value
-		end
-	end,
-})
-
-MainTab:CreateSlider({
-	Name = "Aimbot FOV Radius",
-	Range = {10, 300},
-	Increment = 1,
-	Suffix = "px",
-	CurrentValue = A.Settings.FOVRadius,
-	Flag = "FOVSlider",
-	Callback = function(Value)
-		A.Settings.FOVRadius = Value
-	end,
-})
 
 
 
@@ -2419,15 +2347,6 @@ local NoclipToggle = MainTab:CreateToggle({
 })
 
 local SIGMAClip = MainTab:CreateSection("Aimbot")
-
-MainTab:CreateToggle({
-    Name = "Enable Aimbot",
-    CurrentValue = false,
-    Flag = "AimbotToggle",
-    Callback = function(Value)
-        AimbotEnabled = Value
-    end,
-})
 
 
 local Teleportsection = MainTab:CreateSection("Teleport")
