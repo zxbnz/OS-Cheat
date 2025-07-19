@@ -1,23 +1,8 @@
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
-if player.Character then
-    local part = player.Character:WaitForChild("HumanoidRootPart")
-end
+local part = player.Character:WaitForChild("HumanoidRootPart")
 
-
-local aimbotEnabled = false
-local teamCheck = false
-local fov = 90
-local smoothing = 0.02
-local predictionFactor = 0.08
-local highlightEnabled = false
-local lockPart = "HumanoidRootPart"
-local ToggleKey = Enum.KeyCode.E
-local toggleState = false
-local debounce = false
-local Toggle = true
-local FOVring = Drawing.new("Circle")
 
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -2363,70 +2348,8 @@ local NoclipToggle = MainTab:CreateToggle({
     end,
 })
 
-MainTab:CreateToggle({
-    Name = "Enable Aimbot",
-    CurrentValue = false,
-    Callback = function(Value)
-        aimbotEnabled = Value
-    end
-})
-
-MainTab:CreateToggle({
-    Name = "Team Check",
-    CurrentValue = false,
-    Callback = function(Value)
-        teamCheck = Value
-    end
-})
-
-MainTab:CreateToggle({
-    Name = "Target Highlight",
-    CurrentValue = false,
-    Callback = function(Value)
-        highlightEnabled = Value
-    end
-})
-
-local FOVring = Drawing.new("Circle")
-FOVring.Visible = true
-FOVring.Thickness = 1
-FOVring.Radius = fov
-FOVring.Transparency = 0.8
-FOVring.Color = Color3.fromRGB(255, 128, 128)
-FOVring.Position = workspace.CurrentCamera.ViewportSize / 2
 
 
-MainTab:CreateSlider({
-    Name = "FOV Radius",
-    Range = {30, 360},
-    Increment = 5,
-    Suffix = "px",
-    CurrentValue = fov,
-    Callback = function(Value)
-        fov = Value
-        FOVring.Radius = fov
-    end
-})
-
-MainTab:CreateSlider({
-    Name = "Smoothing",
-    Range = {0.01, 1},
-    Increment = 0.01,
-    CurrentValue = smoothing,
-    Callback = function(Value)
-        smoothing = Value
-    end
-})
-
-MainTab:CreateSlider({
-    Name = "Prediction Factor",
-    Range = {0.01, 0.3},
-    Increment = 0.01,
-    CurrentValue = predictionFactor,
-    Callback = function(Value)
-        predictionFactor = Value
-    end
-})
 
 
 local Teleportsection = MainTab:CreateSection("Teleport")
