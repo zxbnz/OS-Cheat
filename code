@@ -79,6 +79,10 @@ local ThemesTab = Window:CreateTab("Themes", 4483362458)
 local SettingsTab = Window:CreateTab("Settings", 4483362458)
 local UpdatesTab = Window:CreateTab("Updates", 4483362458)
 
+MainTab:CreateParagraph({
+    Title = "Welcome!",
+    Content = "Aimbot & Rayfield has succesfully loaded!."
+
 local RunService = game:GetService("RunService")
 local Player = game.Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
