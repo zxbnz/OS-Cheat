@@ -1,7 +1,10 @@
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
-local PlayerGui = Player:WaitForChild("PlayerGui")
+if player.Character then
+    local part = player.Character:WaitForChild("HumanoidRootPart")
+end
+
 
 local aimbotEnabled = false
 local teamCheck = false
