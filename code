@@ -41,13 +41,25 @@ if not success then
     return
 end
 
+-- Load Rayfield
+print("[AirHub 🔁] Attempting to load Rayfield UI...")
+
+local RayfieldSuccess, RayfieldOrErr = pcall(function()
+    return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+end)
+
+if not RayfieldSuccess then
+    warn("[AirHub ❌] Failed to load Rayfield:", RayfieldOrErr)
+    return
+end
+
 local Rayfield = RayfieldOrErr
 getgenv().Rayfield = Rayfield
-print("[AirHub ✅] Rayfield loaded successfully.")
+print("[AirHub ✅] Rayfield module loaded.")
 
-local Window
-local success, err = pcall(function()
-    Window = Rayfield:CreateWindow({
+-- Try creating the window
+local WindowSuccess, WindowOrErr = pcall(function()
+    return Rayfield:CreateWindow({
         Name = "Nova V1 Operation Siege by zxbnzlol",
         LoadingTitle = "Loading Nova V1!",
         LoadingSubtitle = "by zxbnzlol1",
@@ -75,10 +87,14 @@ local success, err = pcall(function()
     })
 end)
 
-if not success then
-    warn("[Rayfield ❌] Failed to create window:", err)
+if not WindowSuccess then
+    warn("[Rayfield ❌] Failed to create UI window:", WindowOrErr)
     return
 end
+
+local Window = WindowOrErr
+print("[Rayfield ✅] UI window created successfully.")
+
 
 
 local MainTab = Window:CreateTab("Main", 4483362458)
