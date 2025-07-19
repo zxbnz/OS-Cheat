@@ -2,6 +2,14 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
 repeat task.wait() until getgenv().AirHub and getgenv().AirHub.Aimbot
 
+-- Get reference to the Aimbot
+local A = getgenv().AirHub.Aimbot
+
+-- Optional: tweak default settings
+A.Settings.ShowFOV = true
+A.Settings.FOVRadius = 80 -- Default FOV radius
+
+
 -- Required services for your UI callbacks
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -9,10 +17,6 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
-
-
-local A = getgenv().AirHub.Aimbot
-A.FOVCircle = Drawing.new("Circle")
 
 
 -- Settings
