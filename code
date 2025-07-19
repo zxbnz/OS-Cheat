@@ -21,6 +21,7 @@ A.Settings.FOVRadius = 80
 -- Optional: Draw FOV circle
 A.FOVCircle = Drawing.new("Circle")
 
+
 -- ✅ Now load Rayfield UI AFTER everything above
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
@@ -739,16 +740,17 @@ MainTab:CreateToggle({
 })
 
 MainTab:CreateSlider({
-	Name = "Aimbot FOV",
+	Name = "Aimbot FOV Radius",
 	Range = {10, 300},
 	Increment = 1,
-	Suffix = " px",
+	Suffix = "px",
 	CurrentValue = A.Settings.FOVRadius,
-	Flag = "AimbotFOVSlider",
-	Callback = function(value)
-		A.Settings.FOVRadius = value
+	Flag = "FOVSlider",
+	Callback = function(Value)
+		A.Settings.FOVRadius = Value
 	end,
 })
+
 
 
 --DroneESP
