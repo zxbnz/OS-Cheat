@@ -30,9 +30,10 @@ A.Settings.ShowFOV = true
 A.Settings.FOVRadius = 80
 A.FOVCircle = Drawing.new("Circle")
 
--- Load Rayfield from custom host
+-- Load Rayfield from custom host with debug
 local success, RayfieldOrErr = pcall(function()
-    return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+    print("🟩 Attempting to load Rayfield UI...")
+    return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 end)
 
 if not success then
