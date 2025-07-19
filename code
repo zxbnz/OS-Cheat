@@ -74,12 +74,6 @@ local PlayerGui = Player:WaitForChild("PlayerGui")
 local RunService = game:GetService("RunService")
 local Stats = game:GetService("Stats")
 
--- ✅ FPS & Ping Counter (Draggable)
-local Player = game:GetService("Players").LocalPlayer
-local PlayerGui = Player:WaitForChild("PlayerGui")
-local RunService = game:GetService("RunService")
-local Stats = game:GetService("Stats")
-
 -- GUI container
 local fpsGui = Instance.new("ScreenGui")
 fpsGui.Name = "FPSCounterGUI"
@@ -91,7 +85,7 @@ fpsGui.Parent = PlayerGui
 -- Draggable frame
 local dragFrame = Instance.new("Frame")
 dragFrame.Size = UDim2.new(0, 200, 0, 30)
-dragFrame.Position = UDim2.new(1, -220, 0, 10)
+dragFrame.Position = UDim2.new(1, -210, 0, 10)
 dragFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 dragFrame.BackgroundTransparency = 0.2
 dragFrame.BorderSizePixel = 0
@@ -100,7 +94,7 @@ dragFrame.Draggable = true
 dragFrame.Visible = false
 dragFrame.Parent = fpsGui
 
--- Label inside
+-- Label inside frame
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(1, 0, 1, 0)
 fpsLabel.BackgroundTransparency = 1
@@ -112,7 +106,7 @@ fpsLabel.Text = "FPS: ..."
 fpsLabel.TextXAlignment = Enum.TextXAlignment.Left
 fpsLabel.Parent = dragFrame
 
--- FPS & Ping logic
+-- FPS logic
 local lastTime = tick()
 local frameCount = 0
 
@@ -146,7 +140,7 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
--- Rayfield toggle to control visibility
+-- Toggle in Rayfield
 SettingsTab:CreateToggle({
 	Name = "Show FPS & Ping Counter",
 	CurrentValue = false,
@@ -155,6 +149,7 @@ SettingsTab:CreateToggle({
 		dragFrame.Visible = state
 	end,
 })
+
 
 
 -- Theme Selector Dropdown
