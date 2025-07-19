@@ -1,8 +1,19 @@
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
-local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
+local PlayerGui = Player:WaitForChild("PlayerGui")
 
+local aimbotEnabled = false
+local teamCheck = false
+local fov = 90
+local smoothing = 0.02
+local predictionFactor = 0.08
+local highlightEnabled = false
+local lockPart = "HumanoidRootPart"
+local ToggleKey = Enum.KeyCode.E
+local toggleState = false
+local debounce = false
+local Toggle = true
 
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -43,11 +54,6 @@ local UItab = Window:CreateTab("Visuals", 4483362458)
 local ThemesTab = Window:CreateTab("Themes", 4483362458)
 local SettingsTab = Window:CreateTab("Settings", 4483362458)
 local UpdatesTab = Window:CreateTab("Updates", 4483362458)
-
-
-local RunService = game:GetService("RunService")
-local Player = game.Players.LocalPlayer
-local PlayerGui = Player:WaitForChild("PlayerGui")
 
 
 
@@ -2353,22 +2359,8 @@ local NoclipToggle = MainTab:CreateToggle({
     end,
 })
 
-local SIGMAClip = MainTab:CreateSection("Aimbot")
-local aimbotEnabled = false
-local teamCheck = false
-local fov = 90
-local smoothing = 0.02
-local predictionFactor = 0.08
-local highlightEnabled = false
-local lockPart = "HumanoidRootPart"
-local ToggleKey = Enum.KeyCode.E
-local toggleState = false
-local debounce = false
-local Toggle = true  -- Uses key toggle
-
--- UI Setup
 MainTab:CreateToggle({
-    Name = "Aimbot Toggle",
+    Name = "Enable Aimbot",
     CurrentValue = false,
     Callback = function(Value)
         aimbotEnabled = Value
@@ -2384,7 +2376,7 @@ MainTab:CreateToggle({
 })
 
 MainTab:CreateToggle({
-    Name = "Highlight Target",
+    Name = "Target Highlight",
     CurrentValue = false,
     Callback = function(Value)
         highlightEnabled = Value
@@ -2393,7 +2385,7 @@ MainTab:CreateToggle({
 
 MainTab:CreateSlider({
     Name = "FOV Radius",
-    Range = {10, 360},
+    Range = {30, 360},
     Increment = 5,
     Suffix = "px",
     CurrentValue = fov,
@@ -2407,7 +2399,6 @@ MainTab:CreateSlider({
     Name = "Smoothing",
     Range = {0.01, 1},
     Increment = 0.01,
-    Suffix = "",
     CurrentValue = smoothing,
     Callback = function(Value)
         smoothing = Value
@@ -2418,13 +2409,11 @@ MainTab:CreateSlider({
     Name = "Prediction Factor",
     Range = {0.01, 0.3},
     Increment = 0.01,
-    Suffix = "",
     CurrentValue = predictionFactor,
     Callback = function(Value)
         predictionFactor = Value
     end
 })
-
 
 
 local Teleportsection = MainTab:CreateSection("Teleport")
