@@ -32,69 +32,7 @@ A.FOVCircle = Drawing.new("Circle")
 
 print("[AirHub 🔁] Loading Rayfield UI...")
 
-local success, RayfieldOrErr = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source.lua"))()
-end)
-
-
-if not success then
-    warn("[AirHub ❌] Failed to load Rayfield:", RayfieldOrErr)
-    return
-end
-
--- Load Rayfield
-print("[AirHub 🔁] Attempting to load Rayfield UI...")
-
-local RayfieldSuccess, RayfieldOrErr = pcall(function()
-    return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
-end)
-
-if not RayfieldSuccess then
-    warn("[AirHub ❌] Failed to load Rayfield:", RayfieldOrErr)
-    return
-end
-
-local Rayfield = RayfieldOrErr
-getgenv().Rayfield = Rayfield
-print("[AirHub ✅] Rayfield module loaded.")
-
--- Try creating the window
-local WindowSuccess, WindowOrErr = pcall(function()
-    return Rayfield:CreateWindow({
-        Name = "Nova V1 Operation Siege by zxbnzlol",
-        LoadingTitle = "Loading Nova V1!",
-        LoadingSubtitle = "by zxbnzlol1",
-        Theme = "Default",
-        ConfigurationSaving = {
-            Enabled = true,
-            FolderName = nil,
-            FileName = "Big Hub"
-        },
-        Discord = {
-            Enabled = false,
-            Invite = "noinvitelink",
-            RememberJoins = true
-        },
-        KeySystem = false,
-        KeySettings = {
-            Title = "Untitled",
-            Subtitle = "Key System",
-            Note = "No method of obtaining the key is provided",
-            FileName = "Key",
-            SaveKey = true,
-            GrabKeyFromSite = false,
-            Key = {"Hello"}
-        }
-    })
-end)
-
-if not WindowSuccess then
-    warn("[Rayfield ❌] Failed to create UI window:", WindowOrErr)
-    return
-end
-
-local Window = WindowOrErr
-print("[Rayfield ✅] UI window created successfully.")
+-- ✅
 
 
 
