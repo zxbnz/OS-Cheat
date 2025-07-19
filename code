@@ -33,7 +33,7 @@ A.FOVCircle = Drawing.new("Circle")
 print("[AirHub 🔁] Loading Rayfield UI...")
 
 local success, RayfieldOrErr = pcall(function()
-    return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source.lua"))()
 end)
 
 if not success then
