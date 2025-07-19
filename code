@@ -1,5 +1,5 @@
--- Load the Aimbot module
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
+local HttpService = game:GetService("HttpService")
+loadstring(HttpService:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
 repeat task.wait() until getgenv().AirHub and getgenv().AirHub.Aimbot
 
 -- Get reference to the Aimbot
