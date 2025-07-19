@@ -1,3 +1,10 @@
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+
+
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -2347,6 +2354,77 @@ local NoclipToggle = MainTab:CreateToggle({
 })
 
 local SIGMAClip = MainTab:CreateSection("Aimbot")
+local aimbotEnabled = false
+local teamCheck = false
+local fov = 90
+local smoothing = 0.02
+local predictionFactor = 0.08
+local highlightEnabled = false
+local lockPart = "HumanoidRootPart"
+local ToggleKey = Enum.KeyCode.E
+local toggleState = false
+local debounce = false
+local Toggle = true  -- Uses key toggle
+
+-- UI Setup
+MainTab:CreateToggle({
+    Name = "Aimbot Toggle",
+    CurrentValue = false,
+    Callback = function(Value)
+        aimbotEnabled = Value
+    end
+})
+
+MainTab:CreateToggle({
+    Name = "Team Check",
+    CurrentValue = false,
+    Callback = function(Value)
+        teamCheck = Value
+    end
+})
+
+MainTab:CreateToggle({
+    Name = "Highlight Target",
+    CurrentValue = false,
+    Callback = function(Value)
+        highlightEnabled = Value
+    end
+})
+
+MainTab:CreateSlider({
+    Name = "FOV Radius",
+    Range = {10, 360},
+    Increment = 5,
+    Suffix = "px",
+    CurrentValue = fov,
+    Callback = function(Value)
+        fov = Value
+        FOVring.Radius = fov
+    end
+})
+
+MainTab:CreateSlider({
+    Name = "Smoothing",
+    Range = {0.01, 1},
+    Increment = 0.01,
+    Suffix = "",
+    CurrentValue = smoothing,
+    Callback = function(Value)
+        smoothing = Value
+    end
+})
+
+MainTab:CreateSlider({
+    Name = "Prediction Factor",
+    Range = {0.01, 0.3},
+    Increment = 0.01,
+    Suffix = "",
+    CurrentValue = predictionFactor,
+    Callback = function(Value)
+        predictionFactor = Value
+    end
+})
+
 
 
 local Teleportsection = MainTab:CreateSection("Teleport")
