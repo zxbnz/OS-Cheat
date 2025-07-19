@@ -12,6 +12,10 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
+local A = getgenv().AirHub.Aimbot
+A.FOVCircle = Drawing.new("Circle")
+
+
 -- Settings
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
@@ -683,25 +687,14 @@ MainTab:CreateToggle({
 	Name = "Enable Aimbot",
 	CurrentValue = false,
 	Flag = "EnableAimbot",
-	Callback = function(Value)
+	Callback = function(enabled)
 		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
 		if aimbot then
-			aimbot.Settings.Enabled = Value
+			aimbot.Settings.Enabled = enabled
 		end
 	end,
 })
 
-MainTab:CreateToggle({
-	Name = "Third Person Mode",
-	CurrentValue = false,
-	Flag = "ThirdPerson",
-	Callback = function(Value)
-		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
-		if aimbot then
-			aimbot.Settings.ThirdPerson = Value
-		end
-	end,
-})
 
 MainTab:CreateToggle({
 	Name = "Team Check",
@@ -739,6 +732,16 @@ MainTab:CreateToggle({
 	end,
 })
 
+MainTab:CreateSlider({
+	Name = "Aimbot FOV",
+	Range = {10, 300},
+	Increment = 5,
+	CurrentValue = A.FOVSettings.Amount,
+	Callback = function(value)
+		A.FOVSettings.Amount = value
+		A.FOVCircle.Radius = value -- Update the drawing circle immediately
+	end
+})
 
 
 
