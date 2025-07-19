@@ -2375,11 +2375,11 @@ local NoclipToggle = MainTab:CreateToggle({
     end,
 })
 
-local Teleportsection = MainTab:CreateSection("Aimbot")
+local Teleportsection = MainTab:CreateSection("Aim Assist")
 
 -- Create Toggle for aimbotEnabled
 MainTab:CreateToggle({
-    Name = "Enable Aimbot",
+    Name = "Enable Aimassist",
     CurrentValue = aimbotEnabled,
     Flag = "AimbotToggle",
     Callback = function(Value)
@@ -2413,6 +2413,28 @@ MainTab:CreateSlider({
         if FOVring then
             FOVring.Radius = fov
         end
+    end,
+})
+
+-- Toggle: Highlight ESP On/Off
+MainTab:CreateToggle({
+    Name = "Enable Highlight ESP",
+    CurrentValue = highlightEnabled,
+    Flag = "HighlightToggle",
+    Callback = function(Value)
+        highlightEnabled = Value
+        print("Highlight ESP:", highlightEnabled)
+    end,
+})
+
+-- Toggle: Team Check On/Off
+MainTab:CreateToggle({
+    Name = "Enable Team Check",
+    CurrentValue = teamCheck,
+    Flag = "TeamCheckToggle",
+    Callback = function(Value)
+        teamCheck = Value
+        print("Team Check:", teamCheck)
     end,
 })
  
@@ -2519,6 +2541,15 @@ loop = RunService.RenderStepped:Connect(function()
         end
     end
 end)
+
+if highlightEnabled then
+    -- apply highlights
+end
+
+if teamCheck and player.Team == LocalPlayer.Team then
+    -- skip this player
+end
+
 
 
 
