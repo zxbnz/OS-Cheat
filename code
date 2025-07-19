@@ -1,26 +1,34 @@
-local HttpService = game:GetService("HttpService")
-loadstring(HttpService:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
+-- Load the Aimbot module with debug
+local success, err = pcall(function()
+    print("[AirHub] Attempting to load Aimbot module...")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
+end)
+
+if not success then
+    warn("[AirHub] ❌ Failed to load Aimbot module: " .. tostring(err))
+else
+    print("[AirHub] ✅ Aimbot module loaded successfully.")
+end
+
+-- Wait for AirHub to load
 repeat task.wait() until getgenv().AirHub and getgenv().AirHub.Aimbot
 
 -- Get reference to the Aimbot
 local A = getgenv().AirHub.Aimbot
 
--- Required services
+-- Setup services
 local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
--- Initial Aimbot settings
+-- Aimbot Settings
 A.Settings.Enabled = false
 A.Settings.ShowFOV = true
 A.Settings.FOVRadius = 80
-
--- Optional: Draw FOV circle
 A.FOVCircle = Drawing.new("Circle")
-
 
 -- ✅ Now load Rayfield UI AFTER everything above
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
