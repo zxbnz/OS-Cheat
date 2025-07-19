@@ -663,6 +663,43 @@ if playerESPSettings.Enabled then
     setupPlayerESP()
 end
 
+MainTab:CreateToggle({
+	Name = "Enable Aimbot",
+	CurrentValue = false,
+	Flag = "Toggle_Aimbot",
+	Callback = function(Value)
+		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
+		if aimbot then
+			aimbot.Settings.Enabled = Value
+		end
+	end,
+})
+
+MainTab:CreateToggle({
+	Name = "Third Person Mode",
+	CurrentValue = false,
+	Flag = "Toggle_ThirdPerson",
+	Callback = function(Value)
+		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
+		if aimbot then
+			aimbot.Settings.ThirdPerson = Value
+		end
+	end,
+})
+
+MainTab:CreateToggle({
+	Name = "Team Check",
+	CurrentValue = false,
+	Flag = "Toggle_TeamCheck",
+	Callback = function(Value)
+		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
+		if aimbot then
+			aimbot.Settings.TeamCheck = Value
+		end
+	end,
+})
+
+
 
 
 --DroneESP
