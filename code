@@ -738,14 +738,14 @@ MainTab:CreateToggle({
 MainTab:CreateSlider({
 	Name = "Aimbot FOV",
 	Range = {10, 300},
-	Increment = 5,
-	CurrentValue = A.FOVSettings.Amount,
+	Increment = 1,
+	Suffix = " px",
+	CurrentValue = A.Settings.FOVRadius,
+	Flag = "AimbotFOVSlider",
 	Callback = function(value)
-		A.FOVSettings.Amount = value
-		A.FOVCircle.Radius = value -- Update the drawing circle immediately
-	end
+		A.Settings.FOVRadius = value
+	end,
 })
-
 
 
 --DroneESP
