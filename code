@@ -1,5 +1,10 @@
--- Load AirHub Aimbot
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
+
+-- Test if Aimbot table exists
+print("Aimbot:", getgenv().AirHub and getgenv().AirHub.Aimbot)
+if not (getgenv().AirHub and getgenv().AirHub.Aimbot) then
+  error("⚠️ Aimbot module failed to load — check the URL or network.")
+end
 
 -- Settings
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
