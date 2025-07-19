@@ -16,7 +16,7 @@ local Players = game:GetService("Players")
 StarterGui:SetCore("SendNotification", {
     Title = "Nova Aimbot",
     Text = "Nova Aimbot has succesfully loaded!",
-    Icon = "rbxassetid://139544195716715", -- Replace with your uploaded image ID
+    Icon = "rbxassetid://139544195716715", 
     Duration = 4
 })
 
@@ -220,6 +220,7 @@ local ThemeDropdown = ThemesTab:CreateDropdown({
     end,
  })
 
+local Label = UpdatesTab:CreateLabel("Added Aim Assist with Highlight Esp & Team Check", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
 local Label = UpdatesTab:CreateLabel("Added FPS & Ping Counter", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
 
 -- Add this in the UItab section, before or after the other ESP sections
