@@ -5,12 +5,7 @@ repeat task.wait() until getgenv().AirHub and getgenv().AirHub.Aimbot
 -- Get reference to the Aimbot
 local A = getgenv().AirHub.Aimbot
 
--- Optional: tweak default settings
-A.Settings.ShowFOV = true
-A.Settings.FOVRadius = 80 -- Default FOV radius
-
-
--- Required services for your UI callbacks
+-- Required services
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -18,9 +13,17 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
+-- Initial Aimbot settings
+A.Settings.Enabled = false
+A.Settings.ShowFOV = true
+A.Settings.FOVRadius = 80
 
--- Settings
+-- Optional: Draw FOV circle
+A.FOVCircle = Drawing.new("Circle")
+
+-- ✅ Now load Rayfield UI AFTER everything above
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
 
 local Window = Rayfield:CreateWindow({
     Name = "Nova V1 Operation Siege by zxbnzlol",
