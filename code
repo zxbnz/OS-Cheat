@@ -728,6 +728,22 @@ MainTab:CreateToggle({
 	end,
 })
 
+MainTab:CreateSlider({
+	Name = "Aimbot FOV",
+	Range = {10, 300}, -- Min and Max FOV values
+	Increment = 5,
+	Suffix = "°",
+	CurrentValue = 90,
+	Flag = "AimbotFOV",
+	Callback = function(Value)
+		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
+		if aimbot then
+			aimbot.FOVSettings.Amount = Value
+		end
+	end,
+})
+
+
 
 --DroneESP
 local DroneESPSection = UItab:CreateSection("Drone ESP Settings")
