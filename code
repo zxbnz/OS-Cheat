@@ -14,6 +14,7 @@ local ToggleKey = Enum.KeyCode.E
 local toggleState = false
 local debounce = false
 local Toggle = true
+local FOVring = Drawing.new("Circle")
 
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -2382,6 +2383,15 @@ MainTab:CreateToggle({
         highlightEnabled = Value
     end
 })
+
+local FOVring = Drawing.new("Circle")
+FOVring.Visible = true
+FOVring.Thickness = 1
+FOVring.Radius = fov
+FOVring.Transparency = 0.8
+FOVring.Color = Color3.fromRGB(255, 128, 128)
+FOVring.Position = workspace.CurrentCamera.ViewportSize / 2
+
 
 MainTab:CreateSlider({
     Name = "FOV Radius",
