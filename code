@@ -14,10 +14,12 @@ local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
  
 StarterGui:SetCore("SendNotification", {
-    Title = "Universal Aimbot";
-    Text = "made by bran-bon";
-    Duration = 5;
+    Title = "Nova Aimbot",
+    Text = "Nova Aimbot has succesfully loaded!",
+    Icon = "rbxassetid://139544195716715", -- Replace with your uploaded image ID
+    Duration = 4
 })
+
  
 local FOVring = Drawing.new("Circle")
 FOVring.Visible = true
