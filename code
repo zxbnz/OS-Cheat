@@ -1,8 +1,6 @@
--- Load Aimbot module
+-- Load the Aimbot module
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
-
--- Wait for the aimbot to finish initializing
-task.wait(1)
+repeat task.wait() until getgenv().AirHub and getgenv().AirHub.Aimbot
 
 -- Required services for your UI callbacks
 local RunService = game:GetService("RunService")
@@ -11,6 +9,7 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
+
 
 local A = getgenv().AirHub.Aimbot
 A.FOVCircle = Drawing.new("Circle")
