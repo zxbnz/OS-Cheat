@@ -1,3 +1,6 @@
+-- Load AirHub Aimbot
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/AirHub/main/Modules/Aimbot.lua"))()
+
 -- Settings
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
@@ -663,10 +666,12 @@ if playerESPSettings.Enabled then
     setupPlayerESP()
 end
 
+
+-- Aimbot Toggles
 MainTab:CreateToggle({
 	Name = "Enable Aimbot",
 	CurrentValue = false,
-	Flag = "Toggle_Aimbot",
+	Flag = "EnableAimbot",
 	Callback = function(Value)
 		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
 		if aimbot then
@@ -678,7 +683,7 @@ MainTab:CreateToggle({
 MainTab:CreateToggle({
 	Name = "Third Person Mode",
 	CurrentValue = false,
-	Flag = "Toggle_ThirdPerson",
+	Flag = "ThirdPerson",
 	Callback = function(Value)
 		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
 		if aimbot then
@@ -690,7 +695,7 @@ MainTab:CreateToggle({
 MainTab:CreateToggle({
 	Name = "Team Check",
 	CurrentValue = false,
-	Flag = "Toggle_TeamCheck",
+	Flag = "TeamCheck",
 	Callback = function(Value)
 		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
 		if aimbot then
@@ -699,7 +704,29 @@ MainTab:CreateToggle({
 	end,
 })
 
+MainTab:CreateToggle({
+	Name = "Wall Check",
+	CurrentValue = false,
+	Flag = "WallCheck",
+	Callback = function(Value)
+		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
+		if aimbot then
+			aimbot.Settings.WallCheck = Value
+		end
+	end,
+})
 
+MainTab:CreateToggle({
+	Name = "Toggle Mode (vs Hold)",
+	CurrentValue = false,
+	Flag = "ToggleMode",
+	Callback = function(Value)
+		local aimbot = getgenv().AirHub and getgenv().AirHub.Aimbot
+		if aimbot then
+			aimbot.Settings.Toggle = Value
+		end
+	end,
+})
 
 
 --DroneESP
