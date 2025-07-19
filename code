@@ -81,7 +81,8 @@ local UpdatesTab = Window:CreateTab("Updates", 4483362458)
 
 MainTab:CreateParagraph({
     Title = "Welcome!",
-    Content = "Aimbot & Rayfield has succesfully loaded!."
+    Content = "Aimbot & Rayfield has successfully loaded!"
+}) -- was missing that ;-;
 
 local RunService = game:GetService("RunService")
 local Player = game.Players.LocalPlayer
