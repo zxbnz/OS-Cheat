@@ -251,22 +251,38 @@ local Storage = Instance.new("Folder")
 Storage.Parent = CoreGui
 Storage.Name = "Highlight_Storage"
 
--- Function to get the enemy team of the local player
-local function getEnemyTeam()
-    -- Replace these with the actual team names in your game
-    local ATTACKER_TEAM = "Attackers"
-    local DEFENDER_TEAM = "Defenders"
-    
-    if not lp.Team then return nil end
-    
-    if lp.Team.Name == ATTACKER_TEAM then
-        return DEFENDER_TEAM
-    elseif lp.Team.Name == DEFENDER_TEAM then
-        return ATTACKER_TEAM
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+
+local ATTACKER_TEAM = "Attackers"
+local DEFENDER_TEAM = "Defenders"
+
+local myTeam
+local enemyTeam
+
+local function updateTeams()
+    if not lp.Team then
+        myTeam = nil
+        enemyTeam = nil
+        return
     end
-    
-    return nil
+
+    myTeam = lp.Team.Name
+
+    if myTeam == ATTACKER_TEAM then
+        enemyTeam = DEFENDER_TEAM
+    elseif myTeam == DEFENDER_TEAM then
+        enemyTeam = ATTACKER_TEAM
+    else
+        enemyTeam = nil
+    end
 end
+
+-- Initial update
+updateTeams()
+
+-- React to team changes
+lp:GetPropertyChangedSignal("Team"):Connect(updateTeams)
 
 -- Function to check if a player is on the enemy team
 local function isEnemy(plr)
